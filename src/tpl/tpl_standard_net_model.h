@@ -10,6 +10,11 @@
 #include "tpl_abstract_net_model.h"
 
 namespace tpl {
+    /*!
+     * \typedef std::map<std::pair<TplPin*, TplPin*>, double> NetWeight;
+     * \brief NetWeight type
+     */
+    using NetWeight = std::map<std::pair<TplPin*, TplPin*>, double>;
 
     class TplStandardNetModel : public TplAbstractNetModel {
     public:

@@ -2,15 +2,18 @@
 // Created by fpeng on 16-6-5.
 //
 
-#ifndef TPL_TPL_DEBUG_H
-#define TPL_TPL_DEBUG_H
+#ifndef TPL_DEBUG_H
+#define TPL_DEBUG_H
 
 #include <cassert>
+
 #include <ctime>
 #include <chrono>
+
 #include <cstdio>
 #include <iostream>
 #include <iomanip>
+
 #include <string>
 
 #define checkStatus(status, message) \
@@ -35,4 +38,4 @@ private:
 };
 
 
-#endif //TPL_TPL_DEBUG_H
+#endif //TPL_DEBUG_H

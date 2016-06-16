@@ -7,22 +7,19 @@
 #ifndef TPL_STANDARD_ALGORITHM_H
 #define TPL_STANDARD_ALGORITHM_H
 
-#include "tpl_abstract_algorithm.h"
-
 #include <vector>
 #include <memory>
 
-#include "tpl_abstract_algorithm.h"
 #include "tpl_standard_net_model.h"
 #include "tpl_standard_net_force_model.h"
 #include "tpl_standard_thermal_force_model.h"
-#include "utils.h"
+#include "linear_algebra_lib.h"
 
 namespace tpl {
     using std::vector;
 
     //! Standard implementation for tpl algorithm.
-    class TplStandardAlgorithm : public TplAbstractAlgorithm {
+    class TplStandardAlgorithm {
     public:
         //! Constructor.
         TplStandardAlgorithm();
