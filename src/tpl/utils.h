@@ -11,13 +11,6 @@
 #include <Eigen/IterativeLinearSolvers>
 #include <Eigen/Cholesky>
 
-#ifndef NDEBUG
-#include <cstdio>
-#include <cassert>
-#include <ctime>
-#include <iostream>
-#endif
-
 namespace tpl {
 
     using VectorXd = Eigen::VectorXd;
@@ -40,7 +33,6 @@ namespace tpl {
      * \brief LLTSolver type
      */
     using LLTSolver = Eigen::SimplicialLLT<SpMat>;
-
 }
 
 #endif //TPL_UTILS_H

@@ -5,23 +5,19 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include <catch.hpp>
 
-#include <iterator>
-#include <cstdlib>
-#include <cstring>
-
-#include "bookshelf_pl_parser.hpp"
-#include "bookshelf_node_parser.hpp"
+#include "bookshelf_node.hpp"
+#include "bookshelf_pl.hpp"
 
 using namespace std;
-using namespace thueda;
+using namespace bks;
 
 SCENARIO("adaptec1", "[adaptec1]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec1/adaptec1";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec1/adaptec1";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -55,8 +51,8 @@ SCENARIO("adaptec1", "[adaptec1]") {
 SCENARIO("adaptec2", "[adaptec2]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec2/adaptec2";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec2/adaptec2";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -90,8 +86,8 @@ SCENARIO("adaptec2", "[adaptec2]") {
 SCENARIO("adaptec3", "[adaptec3]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec3/adaptec3";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec3/adaptec3";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -125,8 +121,8 @@ SCENARIO("adaptec3", "[adaptec3]") {
 SCENARIO("adaptec4", "[adaptec4]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec4/adaptec4";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec4/adaptec4";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -160,8 +156,8 @@ SCENARIO("adaptec4", "[adaptec4]") {
 SCENARIO("bigblue1", "[bigblue1]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/bigblue1/bigblue1";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/bigblue1/bigblue1";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -195,8 +191,8 @@ SCENARIO("bigblue1", "[bigblue1]") {
 SCENARIO("bigblue2", "[bigblue2]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/bigblue2/bigblue2";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/bigblue2/bigblue2";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -230,8 +226,8 @@ SCENARIO("bigblue2", "[bigblue2]") {
 SCENARIO("bigblue3", "[bigblue3]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/bigblue3/bigblue3";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/bigblue3/bigblue3";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);
@@ -265,8 +261,8 @@ SCENARIO("bigblue3", "[bigblue3]") {
 SCENARIO("bigblue4", "[bigblue4]") {
 
     GIVEN("A .pl file and a BookshelfPlParser") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/bigblue4/bigblue4";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/bigblue4/bigblue4";
 
         ifstream nodes_in(path+".nodes", ios_base::in);
         nodes_in.unsetf(ios::skipws);

@@ -1,39 +1,78 @@
 /*!
- * \file bookshelf_node_parser.hpp
+ * \file bookshelf_node.hpp
  * \author Peng Fei
- * \brief Parser definition for bookshelf .nodes files.
+ * \brief In-memory data structure definition for bookshelf .nodes files.
  */
 
-#ifndef BOOKSHELF_NODE_PARSER_HPP
-#define BOOKSHELF_NODE_PARSER_HPP
+#ifndef BOOKSHELF_NODE_HPP
+#define BOOKSHELF_NODE_HPP
 
-#include <string>
-#include <vector>
+#include "utils.h"
 
-#include <boost/spirit/include/qi.hpp>
+namespace bks {
 
-#include "bookshelf_node.h"
+    //! public class storing one node's width and height information.
+    /*!
+     * When BookshelfNodeParser parse .nodes files, the nodes' information are stored in this struct. 
+     * A bool fixed is used to indicate wether this node is movable within the chip's boundary.
+     * A default constructor is explicitly provided mainly for setting the fixed bool to false.
+     */
+    struct BookshelfNode {
+        Id id;     //!< A node's id
+        int width;  //!< A node's width
+        int height; //!< A node's height
+        bool fixed;  //!< A node's move mode flag
 
-namespace qi=boost::spirit::qi;
-namespace asc = boost::spirit::ascii;
+        //! Default constructor for BookshelfNode
+        BookshelfNode() : id(""), width(0), height(0), fixed(false) {
+        }
+    };
+
+    /*!
+     * \fn std::ostream & operator<<(std::ostream &out, const BookshelfNode &node);
+     * \brief A help function used for printing the BookshelfNode's information.
+     * \param out  the output stream object
+     * \param node the node to be printed
+     */
+    inline std::ostream &operator<<(std::ostream &out, const BookshelfNode &node) {
+        out << node.id << " " << node.width << " " << node.height << " " << node.fixed;
+        return out;
+    }
+
+    //! The in-memory representation class for the .nodes files.
+    /*!
+     * This struct can be seen as the in-memory equivalent of the .nodes files, 
+     * which contains all the nodes' information as well as other metadata, such as number of nodes.
+     * A default constructor is provided for allocating some storage space in the first time.
+     */
+    struct BookshelfNodes {
+        unsigned int num_nodes;     //!< Number of node in .node files
+        unsigned int num_terminals; //!< Number of terminals in .node files
+        std::vector<BookshelfNode> data;  //!< Vector storing all the nodes in .nodes files
+
+        //! Default constructor for BookshelfNodes
+        BookshelfNodes() : num_nodes(0), num_terminals(0) {
+            data.reserve(200000);
+        }
+    };
+}// namespace bks
 
 BOOST_FUSION_ADAPT_STRUCT(
-        thueda::BookshelfNode,
-        (thueda::Id,         id)
-        (thueda::Length,  width)
-        (thueda::Length, height)
-        (bool,            fixed)
+        bks::BookshelfNode,
+        (bks::Id, id)
+        (int,  width)
+        (int, height)
+        (bool, fixed)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-        thueda::BookshelfNodes,
-        (unsigned int,                  num_nodes)
-        (unsigned int,              num_terminals)
-        (std::vector<thueda::BookshelfNode>, data)
+        bks::BookshelfNodes,
+        (unsigned int,               num_nodes)
+        (unsigned int,           num_terminals)
+        (std::vector<bks::BookshelfNode>, data)
 )
 
-namespace thueda {
-
+namespace bks {
     //! Symbols tables for the Bookshelf Node grammar.
     /*!
      *  When the parser reads in a line ending with terminal,
@@ -93,8 +132,8 @@ namespace thueda {
         static NodeMoveTypeSymbolTable  node_move_type_symbol;                        //!< Node file symbol table
 
         qi::rule<Iterator, qi::unused_type(), asc::space_type>           header_rule; //!< escape headers
-        qi::rule<Iterator,        unsigned(), asc::space_type>        num_nodes_rule; //!< store NumNodes
-        qi::rule<Iterator,        unsigned(), asc::space_type>    num_terminals_rule; //!< store NumTerminals
+        qi::rule<Iterator,    unsigned int(), asc::space_type>        num_nodes_rule; //!< store NumNodes
+        qi::rule<Iterator,    unsigned int(), asc::space_type>    num_terminals_rule; //!< store NumTerminals
         qi::rule<Iterator, qi::unused_type(), asc::space_type>          comment_rule; //!< escape comments
         qi::rule<Iterator,     std::string(), asc::space_type>               id_rule; //!< cache node id
         qi::rule<Iterator,   BookshelfNode(), asc::space_type>             node_rule; //!< parse one line of node
@@ -119,7 +158,7 @@ namespace thueda {
         return ret;
     }
 
-}//end namespace thueda
+}//end namespace bks
 
-#endif  
+#endif//BOOKSHELF_NODE_HPP
 

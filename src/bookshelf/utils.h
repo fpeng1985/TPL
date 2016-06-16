@@ -7,9 +7,23 @@
 #ifndef BOOKSHELF_UTILS_H
 #define BOOKSHELF_UTILS_H
 
+#include <cstddef>
 #include <string>
+#include <vector>
+#include <iostream>
+#include <iomanip>
 
-namespace thueda {
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/karma.hpp>
+
+
+namespace bks {
+
+    namespace qi    = boost::spirit::qi;
+    namespace karma = boost::spirit::karma;
+    namespace asc   = boost::spirit::ascii;
+
+    using std::size_t;
 
     /*!
      * \typedef std::string Id
@@ -21,32 +35,25 @@ namespace thueda {
      * \typedef unsigned int Length
      * \brief Length type
      */
-    typedef int Length;
+//    typedef int Length;
 
     /*!
      * \typedef unsigned int Coordinate 
      * \brief Coordinate type
      */
-    typedef double Coordinate;
+//    typedef double Coordinate;
 
     /*!
      * \typedef double Distance 
      * \brief Distance type
      */
-    typedef double Distance;
+//    typedef double Distance;
 
     /*!
      * \typedef double Direction 
      * \brief Direction type
      */
-    typedef double Direction;
-
-    /*!
-     * \enum IOType {Output, Input};
-     * \brief Pin's IO type
-     */
-    enum class IOType {Output, Input, Bidirection};
-
+//    typedef double Direction;
 }
 
 #endif//BOOKSHELF_UTILS_H
