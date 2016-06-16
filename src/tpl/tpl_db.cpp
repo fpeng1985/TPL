@@ -65,23 +65,6 @@ namespace tpl {
         return _modules.at(_mod_id_index_map.at(id)).fixed;
     }
 
-    TplNet& TplDB::net(const std::string &id)
-    {
-#ifndef NDEBUG
-        assert(_net_id_index_map.count(id) != 0);
-        return _nets.at(_net_id_index_map.at(id));
-#else
-        return _nets[_net_id_index_map[id]];
-#endif
-    }
-
-    const TplNet& net(const std::string &id) const
-    {
-        assert(_net_id_index_map.count(id) != 0);
-
-        return _nets.at(_net_id_index_map.at(id));
-    }
-
     bool TplDB::load_data(const std::string &path)
     {
         try {

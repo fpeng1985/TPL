@@ -184,12 +184,6 @@ namespace tpl {
 
         //! Query interface checking wether a module is fixed.
         bool is_module_fixed(const std::string &id) const;
-
-        //! Get a TplNet reference with a ID id.
-        TplNet& net(const std::string &id);
-
-        //! Get a const TplNet reference with a ID id.
-        const TplNet& net(const std::string &id) const;
         ///////////////////////// Individual Module and Net Access ///////////////////
 
         ///////////////////////// Global Operations //////////////////////////////////////////
