@@ -7,8 +7,6 @@
 #ifndef TPL_STANDARD_NET_MODEL_H
 #define TPL_STANDARD_NET_MODEL_H
 
-#include "tpl_abstract_net_model.h"
-
 namespace tpl {
     /*!
      * \typedef std::map<std::pair<TplPin*, TplPin*>, double> NetWeight;

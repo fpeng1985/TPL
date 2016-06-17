@@ -11,20 +11,21 @@
 
 using namespace std;
 using namespace tpl;
+
 SCENARIO("adaptec1", "[adaptec1]") {
 
     GIVEN("A circuit adaptec1") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec1";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec1";
 
         WHEN("We load the circuit") {
-            bool load_status = TplDB::db().load_circuit(path);
+            bool load_status = TplDB::db().load_data(path);
 
             THEN("We get its size and cell number") {
                 REQUIRE(load_status == true);
-                REQUIRE(TplDB::db().modules.chip_width() == 11589);
-                REQUIRE(TplDB::db().modules.chip_height() == 11589);
-                REQUIRE(TplDB::db().modules.num_free() == 210904);
+                REQUIRE(TplDB::db().chip_width() == 11589);
+                REQUIRE(TplDB::db().chip_height() == 11589);
+                REQUIRE(TplDB::db().num_free() == 210904);
             }
         }
     }

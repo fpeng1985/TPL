@@ -1,8 +1,8 @@
 include_directories(${PROJECT_SOURCE_DIR}/tpl)
 
 #1.TplDB
-add_executable(test_tpl_db $<TARGET_OBJECTS:db_obj> test_tpl_db.cpp)
-target_link_libraries(test_tpl_db bookshelf ${Boost_LIBRARIES})
+add_executable(test_tpl_db $<TARGET_OBJECTS:tpl_db_obj> test_tpl_db.cpp)
+#target_link_libraries(test_tpl_db ${Boost_LIBRARIES})
 
 #2.TplStandardNetModel
 #set(TPL_STANDARD_NET_MODEL_SRC

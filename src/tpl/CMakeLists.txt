@@ -2,7 +2,7 @@
 include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/bookshelf)
 
 #1.TplDB
-add_library(db_obj OBJECT tpl_db.cpp)
+add_library(tpl_db_obj OBJECT tpl_db.cpp)
 
 #2.TplStandardNetModel
 #add_library(net_model_obj OBJECT tpl_standard_net_model.cpp)

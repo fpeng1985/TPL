@@ -3,19 +3,18 @@
 //
 
 #include "tpl_db.h"
+
 #include <cassert>
-using std::assert;
 
 #include <algorithm>
 #include <iterator>
 #include <fstream>
 #include <sstream>
 
-#ifndef NDEBUG
 #include "tpl_debug.h"
-#endif
 
 namespace tpl {
+    using namespace std;
 
     TplModule& TplDB::module(const std::string &id)
     {
@@ -51,7 +50,7 @@ namespace tpl {
         return _modules.at(pos);
     }
 
-    size_t module_index(const std::string &id) const
+    size_t TplDB::module_index(const std::string &id) const
     {
         assert(_mod_id_index_map.count(id) != 0);
 
@@ -78,9 +77,11 @@ namespace tpl {
             ///////////////////////////////////////////////////////////////////
             //load modules
             t.timeit();
-            string node_file_path = common_dir + _benchmark_name + ".nodes";
-            string pl_file_path   = common_dir + _benchmark_name + ".pl";
+            string node_file_path = path + "/" + _benchmark_name + ".nodes";
+            string pl_file_path   = path + "/" + _benchmark_name + ".pl";
 
+            cout << node_file_path << endl;
+            cout << pl_file_path << endl;
             initialize_modules(node_file_path, pl_file_path);
             t.timeit("load module");
             ///////////////////////////////////////////////////////////////////
@@ -88,8 +89,9 @@ namespace tpl {
             ///////////////////////////////////////////////////////////////////
             t.timeit();
             //load nets
-            string net_file_path = common_dir + _benchmark_name + ".nets";
+            string net_file_path = path + "/" + _benchmark_name + ".nets";
 
+            cout << net_file_path << endl;
             initialize_nets(net_file_path);
             t.timeit("load net");
             ///////////////////////////////////////////////////////////////////
@@ -111,7 +113,6 @@ namespace tpl {
         _chip_height = 0;
 
         _mod_id_index_map.clear();
-        _net_id_index_map.clear();
 
         _modules.clear();
         _nets.clear();
@@ -196,7 +197,7 @@ namespace tpl {
         BookshelfPls bpls;
         parse_bookshelf_pl(pl_begin, pl_end, bpls);
 
-        //set other module related data
+        //set module related data
         assert(bnodes.data.size() == bpls.data.size());
 
         _num_modules      = bnodes.num_nodes;
@@ -238,14 +239,10 @@ namespace tpl {
         BookshelfNets bnets;
         parse_bookshelf_net(net_begin, net_end, bnets);
 
-        //set other net related data
+        //set net related data
         _num_nets = bnets.num_nets;
         _num_pins = bnets.num_pins;
 
-        for (size_t i=0; i<bnets.size(); ++i) {
-            _nets.push_back(bnets[i]);
-            _net_id_index_map.insert( make_pair(bnets[i].id, i) );
-        }
         copy(bnets.data.begin(), bnets.data.end(), back_inserter(_nets));
     }
 }

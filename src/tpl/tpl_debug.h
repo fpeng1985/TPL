@@ -5,8 +5,6 @@
 #ifndef TPL_DEBUG_H
 #define TPL_DEBUG_H
 
-#include <cassert>
-
 #include <ctime>
 #include <chrono>
 

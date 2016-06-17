@@ -25,7 +25,7 @@ namespace bks {
         bool fixed;  //!< A node's move mode flag.
 
         BookshelfPl() = default;
-        BookshelfPl(Id id, Coordinate x, Coordinate y, bool fixed) : id(id), x(x), y(y), fixed(fixed) {
+        BookshelfPl(Id id, int x, int y, bool fixed) : id(id), x(x), y(y), fixed(fixed) {
         }
     };
 
