@@ -9,7 +9,7 @@
 
 
 #include "tpl_db.h"
-#include "tpl_standard_algorithm.h"
+#include "tpl_algorithm.h"
 
 #include <iostream>
 
@@ -23,9 +23,9 @@ SCENARIO("adaptec1", "[adaptec1]") {
         path += "/ispd2005/adaptec1";
 
         cout << "path = " << path << endl;
-        TplDB::db().load_circuit(path);
+        TplDB::db().load_data(path);
 
-        TplStandardAlgorithm alg;
+        TplAlgorithm alg;
 
         WHEN("we should stop") {
             alg.control(path, 0);

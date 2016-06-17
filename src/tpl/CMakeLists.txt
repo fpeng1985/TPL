@@ -1,19 +1,15 @@
-
 include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/bookshelf)
 
 #1.TplDB
 add_library(tpl_db_obj OBJECT tpl_db.cpp)
 
-#2.TplStandardNetModel
+#2.TplNetModel
 add_library(tpl_net_model_obj OBJECT tpl_net_model.cpp)
 
-#3.TplStandardNetForceModel
-#add_library(net_force_model_obj OBJECT tpl_standard_net_force_model.cpp)
+#3.TplThermalModel
+add_library(tpl_thermal_model_obj OBJECT tpl_thermal_model.cpp)
 
-#4.TplStandardThermalForceModel
-#add_library(thermal_force_model_obj OBJECT tpl_standard_thermal_force_model.cpp)
-
-#5.TplStandardAlgorithm
-#add_library(standard_algorithm_obj OBJECT tpl_standard_algorithm.cpp)
+#5.TplAlgorithm
+add_library(tpl_algorithm_obj OBJECT tpl_algorithm.cpp)
 
 add_subdirectory(unittest)

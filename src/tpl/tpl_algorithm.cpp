@@ -1,15 +1,14 @@
-#include "tpl_standard_algorithm.h"
-#include "debug.h"
+#include "tpl_algorithm.h"
+#include "tpl_debug.h"
 
 #include <cassert>
-#include <ctime>
 #include <cstdlib>
 #include <cstdio>
 #include <fstream>
 #include <algorithm>
 #include <unistd.h>
 
-#include "debug.h"
+#include "tpl_debug.h"
 
 #include <boost/filesystem.hpp>
 
@@ -18,11 +17,11 @@
 namespace tpl {
     using namespace std;
 
-    TplStandardAlgorithm::TplStandardAlgorithm()
+    TplAlgorithm::TplAlgorithm()
     {
        initialize_models();
 
-        const unsigned &msize = TplDB::db().modules.num_free();
+        const unsigned &msize = TplDB::db().num_free();
 
         Cx  = SpMat(msize, msize);
         Cy  = SpMat(msize, msize);
@@ -34,29 +33,32 @@ namespace tpl {
         HFy.resize(msize);
     }
 
-	void TplStandardAlgorithm::initialize_models()
+	void TplAlgorithm::initialize_models()
 	{
-		_net_model           = make_shared<TplStandardNetModel>();
-		_net_force_model     = make_shared<TplStandardNetForceModel>();
-		_thermal_force_model = make_shared<TplStandardThermalForceModel>();
+		_net_model     = make_shared<TplNetModel>();
+		_thermal_model = make_shared<TplThermalModel>();
 	}
 
-    void TplStandardAlgorithm::control(std::string path, bool mmp) {
+    void TplAlgorithm::control(std::string path, bool mmp) {
 		Timer timer;
 //		timer.timeit();
+        /*
         if (mmp) {
 			timer.timeit();
             shred();
 			timer.timeit("shred");
         }
+         */
 //		timer.timeit();
-//        make_initial_placement();
+        make_initial_placement();
 //		timer.timeit("initial placement");
+        /*
         if (mmp) {
 			timer.timeit();
             aggregate();
 			timer.timeit("aggregate");
         }
+         */
 		timer.timeit();
          make_global_placement();
 		timer.timeit("global placement");
@@ -65,9 +67,10 @@ namespace tpl {
 		timer.timeit("detail placement");
     }
 
-    void TplStandardAlgorithm::make_initial_placement()
+    void TplAlgorithm::make_initial_placement()
     {
-        TplDB::db().modules.move_to_center();
+        //TODO:should stop initial placement
+//        TplDB::db().modules.move_to_center();
         vector<double> x_target, y_target;
         NetWeight NWx, NWy;
         _net_model->compute_net_weight(NWx, NWy);
@@ -75,14 +78,15 @@ namespace tpl {
         double lmd = -1, cmd = 0.0;
 		while(!should_stop_initial_placement(lmd, cmd)) {
 			// x_target and y_target will clear and resize in compute_net_force_target
-            _net_force_model->compute_net_force_target(NWx, NWy, x_target, y_target);
-            cmd = TplDB::db().modules.set_free_module_coordinates(x_target, y_target);
+            _net_model->compute_net_force_target(NWx, NWy, x_target, y_target);
+//            cmd = TplDB::db().set_free_module_coordinates(x_target, y_target);
+            TplDB::db().set_free_module_coordinates(x_target, y_target);
 		}
     }
 
-    void TplStandardAlgorithm::make_global_placement()
+    void TplAlgorithm::make_global_placement()
     {
-        const unsigned &msize = TplDB::db().modules.num_free();
+        const unsigned &msize = TplDB::db().num_free();
 
         initialize_move_force_matrix();//compute Cx0 and Cy0
         VectorXd dx(msize), dy(msize);
@@ -90,8 +94,8 @@ namespace tpl {
 
         while (!should_stop_global_placement()) {
             _net_model->compute_net_weight(NWx, NWy);
-            _net_force_model->compute_net_force_matrix(NWx, NWy, Cx, Cy, dx, dy);//compute Cx and Cy
-            _thermal_force_model->compute_heat_flux_vector(HFx, HFy);//Compute HFx and HFy
+            _net_model->compute_net_force_matrix(NWx, NWy, Cx, Cy, dx, dy);//compute Cx and Cy
+            _thermal_model->compute_heat_flux_vector(HFx, HFy);//Compute HFx and HFy
 
             LLTSolver llt;
 
@@ -103,21 +107,21 @@ namespace tpl {
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //the following code breaks the incapsulation, but more quickly, please note!!!
             for (unsigned i=0; i<msize; ++i) {
-                TplDB::db().modules[i].x += delta_x(i);
-                TplDB::db().modules[i].y += delta_y(i);
+                TplDB::db().module(i).x += delta_x(i);
+                TplDB::db().module(i).y += delta_y(i);
             }
 
-            update_move_force_matrix(delta_x, delta_y, _thermal_force_model->get_mu());//udpate Cx0 and Cy0
+            update_move_force_matrix(delta_x, delta_y, _thermal_model->get_mu());//udpate Cx0 and Cy0
         }
     }
 
-	void TplStandardAlgorithm::make_detail_placement(string path) {
+	void TplAlgorithm::make_detail_placement(string path) {
 		// save global placement to .pl file
 		string fn = path + "/gp.pl";
 		ofstream fout(fn);
 		fout << "TPL GP 1.0\n";
-		for (TplModules::iterator mit = TplDB::db().modules.begin();
-			 mit != TplDB::db().modules.end(); mit++) {
+		for (TplDB::mod_iterator mit = TplDB::db().mod_begin();
+			 mit != TplDB::db().mod_end(); mit++) {
 			fout << mit->id << "\t" << mit->x << "\t" << mit->y << endl;
 		}
 		fout.close();
@@ -134,21 +138,21 @@ namespace tpl {
 		}
 	}
 
-    void TplStandardAlgorithm::initialize_move_force_matrix()
+    void TplAlgorithm::initialize_move_force_matrix()
     {
         vector<SpElem> coefficients;
-        unsigned int num_free = TplDB::db().modules.num_free();
+        unsigned int num_free = TplDB::db().num_free();
         vector<double> module_power;
 
         double avg_power = 0;
         double power;
-        for(TplModules::iterator it=TplDB::db().modules.begin(); it!=TplDB::db().modules.end(); ++it) {
+        for(TplDB::mod_iterator it=TplDB::db().mod_begin(); it!=TplDB::db().mod_end(); ++it) {
             power = it->width * it->height * it->power_density;
             avg_power +=  power;
 
             if(!it->fixed) module_power.push_back(power);
         }
-        avg_power /= TplDB::db().modules.size();
+        avg_power /= TplDB::db().num_module();
 
         for(size_t i=0; i<module_power.size(); ++i) {
             coefficients.push_back(SpElem(i, i, module_power[i]/avg_power/num_free));
@@ -158,9 +162,9 @@ namespace tpl {
         Cy0.setFromTriplets(coefficients.begin(), coefficients.end());
     }
 
-    void TplStandardAlgorithm::update_move_force_matrix(const VectorXd &delta_x, const VectorXd &delta_y, double mu)
+    void TplAlgorithm::update_move_force_matrix(const VectorXd &delta_x, const VectorXd &delta_y, double mu)
     {
-        const unsigned &msize = TplDB::db().modules.num_free();
+        const unsigned &msize = TplDB::db().num_free();
 
         double avg_mu = 0;
         for (unsigned int i=0; i<msize; ++i) {
@@ -174,7 +178,7 @@ namespace tpl {
         Cy0 *= k;
     }
 
-	bool TplStandardAlgorithm::should_stop_initial_placement(double &lmd, double &cmd) const {
+	bool TplAlgorithm::should_stop_initial_placement(double &lmd, double &cmd) const {
 		const double DELTA = 0.1;
 
         if (lmd > 0 && cmd > lmd) {
@@ -190,7 +194,7 @@ namespace tpl {
         return ret;
 	}
 
-    bool TplStandardAlgorithm::should_stop_global_placement() const
+    bool TplAlgorithm::should_stop_global_placement() const
     {
        SegmentTree segtree;
         vector<SegmentEvent> events;
@@ -200,7 +204,7 @@ namespace tpl {
 
         double total_area = 0;
 
-        for (TplModules::iterator it=TplDB::db().modules.begin(); it!=TplDB::db().modules.end(); ++it) {
+        for (TplDB::mod_iterator it=TplDB::db().mod_begin(); it!=TplDB::db().mod_end(); ++it) {
             x1 = it->x;
             x2 = it->x + it->width;
             y1 = it->y;
@@ -293,7 +297,8 @@ namespace tpl {
         return -1;
     }
 
-	void TplStandardAlgorithm::shred() {
+    /*
+	void TplAlgorithm::shred() {
 		// list<TplNet> shreddedNets;
 		// find shredded cells of a module through the module id
 		map<Id, vector<TplModule>> macro_cells;
@@ -404,10 +409,11 @@ namespace tpl {
 		TplDB::db().nets.add_net(shreddedNets);
 	}
 
-	void TplStandardAlgorithm::aggregate() {
+	void TplAlgorithm::aggregate() {
 		TplDB::db().modules.aggregate_cells();
 		TplDB::db().nets.delete_net();
 	}
+     */
 
 
 }//end namespace tpl

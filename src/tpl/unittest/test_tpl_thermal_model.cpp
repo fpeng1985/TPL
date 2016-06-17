@@ -9,7 +9,7 @@
 
 #include "utils.h"
 #include "tpl_db.h"
-#include "tpl_standard_thermal_force_model.h"
+#include "tpl_thermal_model.h"
 
 #include <chrono>
 
@@ -19,14 +19,14 @@ using namespace tpl;
 SCENARIO("adaptec1", "[adaptec1]") {
 
     GIVEN("A circuit adaptec1") {
-        string path(getenv("BENCHMARK"));
-        path += "/ispd2005/adaptec1";
+        string path(getenv("EDACOMMON"));
+        path += "/benchmark/ispd2005/adaptec1";
 
-        TplDB::db().load_circuit(path);
+        TplDB::db().load_data(path);
 
-        TplStandardThermalForceModel tfmodel;
+        TplThermalModel tfmodel;
 
-        unsigned int num_free = TplDB::db().modules.num_free();
+        unsigned int num_free = TplDB::db().num_free();
         VectorXd xhf(num_free), yhf(num_free);
         xhf.setZero();
         yhf.setZero();

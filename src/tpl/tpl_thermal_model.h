@@ -1,15 +1,14 @@
 /*!
- * \file tpl_standard_thermal_force_model.h
+ * \file tpl_thermal_model.h
  * \author Peng Fei
- * \brief Standard implementation for Thermal Force Model.
+ * \brief Standard implementation for Thermal Model.
  */
 
-#ifndef TPL_STANDARD_THERMAL_FORCE_MODEL_H
-#define TPL_STANDARD_THERMAL_FORCE_MODEL_H
+#ifndef TPL_THERMAL_FORCE_MODEL_H
+#define TPL_THERMAL_FORCE_MODEL_H
 
-#include "tpl_abstract_thermal_force_model.h"
 
-#include "utils.h"
+#include "linear_algebra_lib.h"
 #include "tpl_db.h"
 
 #include <map>
@@ -21,14 +20,14 @@ namespace tpl {
 
     using std::vector;
 
-    //! Standard implementation for tpl move force model.
-    class TplStandardThermalForceModel : public TplAbstractThermalForceModel {
+    //! Standard implementation for tpl move model.
+    class TplThermalModel {
     public:
         //! Constructor.
-        TplStandardThermalForceModel();
+        TplThermalModel();
 
         //Destructor.
-        ~TplStandardThermalForceModel();
+        ~TplThermalModel();
 
         bool initialize_model();
 

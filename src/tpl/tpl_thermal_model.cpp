@@ -1,8 +1,8 @@
-#include "tpl_standard_thermal_force_model.h"
+#include "tpl_thermal_model.h"
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include "debug.h"
+#include "tpl_debug.h"
 
 namespace tpl {
     using std::cout;
@@ -10,16 +10,16 @@ namespace tpl {
     using std::vector;
 
 
-    TplStandardThermalForceModel::TplStandardThermalForceModel()
+    TplThermalModel::TplThermalModel()
     {
         initialize_model();
 
 
-        _gw_num = floor( TplDB::db().modules.chip_width()  / BIN_WIDTH );
-        _gh_num = floor( TplDB::db().modules.chip_height() / BIN_HEIGHT );
+        _gw_num = floor( TplDB::db().chip_width()  / BIN_WIDTH );
+        _gh_num = floor( TplDB::db().chip_height() / BIN_HEIGHT );
 
-        BIN_WIDTH  = TplDB::db().modules.chip_width()  * 1.0 / _gw_num;
-        BIN_HEIGHT = TplDB::db().modules.chip_height() * 1.0 / _gh_num;
+        BIN_WIDTH  = TplDB::db().chip_width()  * 1.0 / _gw_num;
+        BIN_HEIGHT = TplDB::db().chip_height() * 1.0 / _gh_num;
 
 #ifndef NDEBUG
         _power_density.resize(_gw_num+1, vector<double>(_gh_num+1, 0));
@@ -94,7 +94,7 @@ namespace tpl {
         ////////////////////////////////////////////////////////////////////////////
     }
 
-    TplStandardThermalForceModel::~TplStandardThermalForceModel()
+    TplThermalModel::~TplThermalModel()
     {
 #ifdef NDEBUG
 
@@ -120,7 +120,7 @@ namespace tpl {
 #endif
     }
 
-    bool TplStandardThermalForceModel::initialize_model()
+    bool TplThermalModel::initialize_model()
     {
         try {
             namespace pt = boost::property_tree;
@@ -139,10 +139,10 @@ namespace tpl {
         }
     }
 
-    void TplStandardThermalForceModel::compute_heat_flux_vector(VectorXd &HFx, VectorXd &HFy) {
+    void TplThermalModel::compute_heat_flux_vector(VectorXd &HFx, VectorXd &HFy) {
         //preconditions
-        assert(HFx.rows() == TplDB::db().modules.num_free());
-        assert(HFy.rows() == TplDB::db().modules.num_free());
+        assert(HFx.rows() == TplDB::db().num_free());
+        assert(HFy.rows() == TplDB::db().num_free());
 
         try {
             generate_power_density();
@@ -155,9 +155,9 @@ namespace tpl {
             int idx_x = 0, idx_y = 0;//for (x,y)'s containing grid point index
             double x1 = 0, x2 = 0, y1 = 0, y2 = 0;//for (x,y)'s containing grid coordinates
             double xhf = 0, yhf = 0;//for x and y heat flux value
-            for (size_t i = 0; i != TplDB::db().modules.num_free(); ++i) {
-                x = TplDB::db().modules[i].x + TplDB::db().modules[i].width / 2.0;  //module center x
-                y = TplDB::db().modules[i].y + TplDB::db().modules[i].height / 2.0; //module center y
+            for (size_t i = 0; i != TplDB::db().num_free(); ++i) {
+                x = TplDB::db().module(i).x + TplDB::db().module(i).width / 2.0;  //module center x
+                y = TplDB::db().module(i).y + TplDB::db().module(i).height / 2.0; //module center y
 
                 idx_x = static_cast<int>(floor(x / BIN_WIDTH));
                 idx_y = static_cast<int>(floor(y / BIN_HEIGHT));
@@ -190,7 +190,7 @@ namespace tpl {
 
 
 
-    void TplStandardThermalForceModel::generate_power_density()
+    void TplThermalModel::generate_power_density()
     {
         try {
             // reset _power_density
@@ -207,7 +207,7 @@ namespace tpl {
             //iterate modules to generate the density grid
             double left, right, bottom, top;
             unsigned int idx_left, idx_right, idx_bottom, idx_top;
-            for(TplModules::iterator it=TplDB::db().modules.begin(); it!=TplDB::db().modules.end(); ++it) {
+            for(TplDB::mod_iterator it=TplDB::db().mod_begin(); it!=TplDB::db().mod_end(); ++it) {
 
                 left   = it->x;
                 right  = it->x + it->width;
@@ -231,7 +231,7 @@ namespace tpl {
         }
     }
 
-    double TplStandardThermalForceModel::power_density(int i, int j)
+    double TplThermalModel::power_density(int i, int j)
     {
         try {
 
@@ -265,7 +265,7 @@ namespace tpl {
     }
 
 
-    void TplStandardThermalForceModel::generate_heat_flux_grid()
+    void TplThermalModel::generate_heat_flux_grid()
     {
         try {
 

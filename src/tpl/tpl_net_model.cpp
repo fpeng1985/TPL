@@ -1,4 +1,4 @@
-#include "tpl_standard_net_model.h"
+#include "tpl_net_model.h"
 
 #include <cassert>
 #include <algorithm>

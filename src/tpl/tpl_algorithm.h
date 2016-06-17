@@ -1,40 +1,39 @@
 /*!
- * \file tpl_standard_algorithm.h
+ * \file tpl_algorithm.h
  * \author Peng Fei
  * \brief Standard definition for TPL algorithm interface
  */
 
-#ifndef TPL_STANDARD_ALGORITHM_H
-#define TPL_STANDARD_ALGORITHM_H
+#ifndef TPL_ALGORITHM_H
+#define TPL_ALGORITHM_H
 
 #include <vector>
 #include <memory>
 
-#include "tpl_standard_net_model.h"
-#include "tpl_standard_net_force_model.h"
-#include "tpl_standard_thermal_force_model.h"
 #include "linear_algebra_lib.h"
+#include "tpl_net_model.h"
+#include "tpl_thermal_model.h"
 
 namespace tpl {
     using std::vector;
 
     //! Standard implementation for tpl algorithm.
-    class TplStandardAlgorithm {
+    class TplAlgorithm {
     public:
         //! Constructor.
-        TplStandardAlgorithm();
+        TplAlgorithm();
 
         //! Virtual destructor.
-        virtual ~TplStandardAlgorithm() {}
+        virtual ~TplAlgorithm() {}
 
         //! Standard implementation for interface initialize_models.
         virtual void initialize_models();
 
         //! Standard implementation for shredding macros into cells
-        virtual void shred();
+//        virtual void shred();
 
         //! Standard implementation for aggregating cells into macros
-        virtual void aggregate();
+//        virtual void aggregate();
 
         //! Standard implementation for interface make_initial_placement.
         virtual void make_initial_placement();
@@ -61,9 +60,8 @@ namespace tpl {
         bool should_stop_global_placement() const;
 		bool should_stop_initial_placement(double &lmd, double &cmd) const;
 
-        std::shared_ptr<TplStandardNetModel>          _net_model;           //!< Pointer to a TplNetModel.
-        std::shared_ptr<TplStandardNetForceModel>     _net_force_model;     //!< Pointer to a TplNetForceModel.
-        std::shared_ptr<TplStandardThermalForceModel> _thermal_force_model; //!< Pointer to a TplThermalForceModel.
+        std::shared_ptr<TplNetModel>          _net_model;           //!< Pointer to a TplNetModel.
+        std::shared_ptr<TplThermalModel> _thermal_model; //!< Pointer to a TplThermalModel.
 
         NetWeight NWx, NWy;
         SpMat Cx,  Cy;
