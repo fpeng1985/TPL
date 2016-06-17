@@ -5,7 +5,7 @@ include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/bookshelf)
 add_library(tpl_db_obj OBJECT tpl_db.cpp)
 
 #2.TplStandardNetModel
-#add_library(net_model_obj OBJECT tpl_standard_net_model.cpp)
+add_library(tpl_net_model_obj OBJECT tpl_net_model.cpp)
 
 #3.TplStandardNetForceModel
 #add_library(net_force_model_obj OBJECT tpl_standard_net_force_model.cpp)

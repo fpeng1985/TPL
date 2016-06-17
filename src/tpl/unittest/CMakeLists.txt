@@ -5,14 +5,12 @@ add_executable(test_tpl_db $<TARGET_OBJECTS:tpl_db_obj> test_tpl_db.cpp)
 #target_link_libraries(test_tpl_db ${Boost_LIBRARIES})
 
 #2.TplStandardNetModel
-#set(TPL_STANDARD_NET_MODEL_SRC
-#		$<TARGET_OBJECTS:db_obj>
-#		$<TARGET_OBJECTS:net_model_obj>
-#		)
-#add_executable(test_tpl_net_model
-#		${TPL_STANDARD_NET_MODEL_SRC}
-#		test_tpl_standard_net_model.cpp
-#		)
+set(TPL_STANDARD_NET_MODEL_SRC
+		$<TARGET_OBJECTS:tpl_db_obj>
+		$<TARGET_OBJECTS:tpl_net_model_obj>
+		test_tpl_net_model.cpp
+		)
+add_executable(test_tpl_net_model ${TPL_STANDARD_NET_MODEL_SRC} )
 #target_link_libraries(test_tpl_net_model bookshelf ${Boost_LIBRARIES})
 
 #3.TplStandardNetForceModel

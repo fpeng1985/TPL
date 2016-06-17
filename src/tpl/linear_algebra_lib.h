@@ -9,7 +9,7 @@
 
 #include <Eigen/Sparse>
 #include <Eigen/IterativeLinearSolvers>
-#include <Eigen/Cholesky>
+//#include <Eigen/Cholesky>
 
 namespace tpl {
 
