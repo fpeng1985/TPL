@@ -161,7 +161,7 @@ namespace bks {
 
         return ret;
     }
-/*!
+    /*!
      * \fn bool generate_bookshelf_pl(OutputIterator &sink, const BookshelfPls &pls);
      *
      */

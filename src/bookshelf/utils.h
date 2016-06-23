@@ -30,30 +30,6 @@ namespace bks {
      * \brief Id type
      */
     typedef std::string  Id;
-
-    /*!
-     * \typedef unsigned int Length
-     * \brief Length type
-     */
-//    typedef int Length;
-
-    /*!
-     * \typedef unsigned int Coordinate 
-     * \brief Coordinate type
-     */
-//    typedef double Coordinate;
-
-    /*!
-     * \typedef double Distance 
-     * \brief Distance type
-     */
-//    typedef double Distance;
-
-    /*!
-     * \typedef double Direction 
-     * \brief Direction type
-     */
-//    typedef double Direction;
 }
 
 #endif//BOOKSHELF_UTILS_H

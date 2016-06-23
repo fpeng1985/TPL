@@ -7,8 +7,8 @@
 #ifndef TPL_UTILS_H
 #define TPL_UTILS_H
 
-#include <Eigen/Sparse>
-#include <Eigen/IterativeLinearSolvers>
+#include <eigen3/Eigen/Sparse>
+#include <eigen3/Eigen/IterativeLinearSolvers>
 //#include <Eigen/Cholesky>
 
 namespace tpl {

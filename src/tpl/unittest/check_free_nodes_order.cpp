@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
-#include "../tpl/tpl_db.h"
+#include "tpl_db.h"
 
 using namespace std;
 using namespace tpl;

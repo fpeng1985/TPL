@@ -32,14 +32,12 @@ SCENARIO("adaptec1", "[adaptec1]") {
 
                 REQUIRE(ret == true);
                 REQUIRE(nets.data.size() == nets.num_nets);
-            }
-        }
-
-        cout << endl;
+            }//end THEN
+        }//end WHEN
     }//end GIVEN
-
 }//end adaptec1
 
+/*
 SCENARIO("adaptec2", "[adaptec2]") {
 
     GIVEN("A .nets file and a BookshelfNetParser") {
@@ -235,3 +233,4 @@ SCENARIO("bigblue4", "[bigblue4]") {
     }//end GIVEN
 
 }//end bigblue4
+ */

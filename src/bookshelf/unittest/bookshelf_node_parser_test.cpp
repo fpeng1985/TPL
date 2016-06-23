@@ -21,9 +21,13 @@ SCENARIO("adaptec1", "[adaptec1]") {
         ifstream in(path, ios_base::in);
         in.unsetf(ios::skipws);
         boost::spirit::istream_iterator iter(in), end;
+
+        ofstream out("adaptec1.nodes.out", ios_base::out);
+        boost::spirit::ostream_iterator ositer(out);
         BookshelfNodes nodes;
 
         WHEN("we parse the input") {
+            //test parsing
             bool ret = parse_bookshelf_node(iter, end, nodes);
 
             cout << "data.size " << nodes.data.size() << endl;
@@ -31,6 +35,13 @@ SCENARIO("adaptec1", "[adaptec1]") {
             cout << "num_terminals " << nodes.num_terminals << endl;
 
             THEN("we get a bunch of Bookshelf nodes") {
+                REQUIRE(ret == true);
+            }
+
+            //test generating
+            ret = generate_bookshelf_node(ositer, nodes);
+
+            THEN("we generate a nodes file") {
                 REQUIRE(ret == true);
             }
         }

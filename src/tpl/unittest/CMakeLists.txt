@@ -32,4 +32,4 @@ target_link_libraries(test_tpl_algorithm ${Boost_LIBRARIES} )
 
 #Checks
 #add_executable(check_free_nodes_order $<TARGET_OBJECTS:db_obj> check_free_nodes_order.cpp)
-#target_link_libraries(check_free_nodes_order bookshelf ${Boost_LIBRARIES})
+#target_link_libraries(check_free_nodes_order ${Boost_LIBRARIES})
